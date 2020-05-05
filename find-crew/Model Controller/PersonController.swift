@@ -15,7 +15,7 @@ class PersonController {
     
     var people = [Person]()
     
-    func searchForPeopleWith(searchTerm: String) {
+    func searchForPeopleWith(searchTerm: String, completion: @escaping () -> Void) {
         
         var urlComponents = URLComponents(url: peopleURL, resolvingAgainstBaseURL: true)
         let searchTermQueryItem = URLQueryItem(name: "search", value: searchTerm)
@@ -39,10 +39,11 @@ class PersonController {
             }
             let jsonDecoder = JSONDecoder()
             jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-            
+    
             do {
                 let personSearch = try jsonDecoder.decode(PersonSearch.self, from: data)
                 self.people.append(contentsOf: personSearch.results)
+                completion()
             } catch {
                 print("Unabled to decode data into object of type PersonSearch: \(error)")
             }

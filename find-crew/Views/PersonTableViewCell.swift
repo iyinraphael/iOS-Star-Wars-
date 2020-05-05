@@ -25,16 +25,12 @@ class PersonTableViewCell: UITableViewCell {
         
         nameLabel = UILabel()
         nameLabel.font = .systemFont(ofSize: 24, weight: .bold)
-        nameLabel.text = "Name"
         stackView.addArrangedSubview(nameLabel)
         
         genderLabel = UILabel()
-        genderLabel.text = "Gender"
-        genderLabel.textColor = .black
         stackView.addArrangedSubview(genderLabel)
         
         birthLabel = UILabel()
-        birthLabel.text = "Birth Year"
         stackView.addArrangedSubview(birthLabel)
         
         NSLayoutConstraint.activate([

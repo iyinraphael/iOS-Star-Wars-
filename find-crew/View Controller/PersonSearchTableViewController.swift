@@ -17,8 +17,6 @@ class PersonSearchTableViewController: UIViewController {
     var people = [Person]()
     let personController = PersonController()
     
-    
-    
     //MARK: - View
     override func loadView() {
         super.loadView()
@@ -28,13 +26,20 @@ class PersonSearchTableViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(PersonTableViewCell.self, forCellReuseIdentifier: reuseId)
         view.addSubview(tableView)
-        
-
+    
+        let searchBar = UISearchBar()
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.delegate = self
+        view.addSubview(searchBar)
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50), 
             tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            tableView.heightAnchor.constraint(equalTo: view.heightAnchor)
+            tableView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            
+            searchBar.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 10),
+            searchBar.bottomAnchor.constraint(equalTo: tableView.topAnchor),
+            searchBar.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
     }
     
@@ -55,7 +60,7 @@ extension PersonSearchTableViewController: UITableViewDataSource, UITableViewDel
         let person = personController.people[indexPath.row]
         cell.nameLabel.text = person.name
         cell.genderLabel.text = person.gender
-        cell.birthLabel.text = person.birthYears
+        cell.birthLabel.text = person.birthYear
         
         return cell
     }
@@ -71,6 +76,10 @@ extension PersonSearchTableViewController: UISearchBarDelegate {
         guard let searchTerm = searchBar.text else {
             return
         }
-        personController.searchForPeopleWith(searchTerm: searchTerm)
+        personController.searchForPeopleWith(searchTerm: searchTerm) {
+            DispatchQueue.main.async {
+                 self.tableView.reloadData()
+            }
+        }
     }
 }

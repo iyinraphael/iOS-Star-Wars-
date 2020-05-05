@@ -12,7 +12,7 @@ struct Person: Codable {
 
     let name: String
     let gender: String
-    let birthYears: String
+    let birthYear: String
 }
 
 struct PersonSearch: Codable {
