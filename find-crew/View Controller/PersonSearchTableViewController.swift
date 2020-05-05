@@ -14,6 +14,8 @@ class PersonSearchTableViewController: UIViewController {
     
     //MARK: - Properties
     var tableView: UITableView!
+    var people = [Person]()
+    let personController = PersonController()
     
     
     
@@ -26,6 +28,8 @@ class PersonSearchTableViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(PersonTableViewCell.self, forCellReuseIdentifier: reuseId)
         view.addSubview(tableView)
+        
+
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50), 
@@ -43,11 +47,15 @@ class PersonSearchTableViewController: UIViewController {
 extension PersonSearchTableViewController: UITableViewDataSource, UITableViewDelegate {
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return personController.people.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as! PersonTableViewCell
+        let person = personController.people[indexPath.row]
+        cell.nameLabel.text = person.name
+        cell.genderLabel.text = person.gender
+        cell.birthLabel.text = person.birthYears
         
         return cell
     }
@@ -55,4 +63,14 @@ extension PersonSearchTableViewController: UITableViewDataSource, UITableViewDel
     
     
     
+}
+
+extension PersonSearchTableViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchTerm = searchBar.text else {
+            return
+        }
+        personController.searchForPeopleWith(searchTerm: searchTerm)
+    }
 }
